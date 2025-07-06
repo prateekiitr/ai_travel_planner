@@ -1,14 +1,12 @@
 import streamlit as st
 import streamlit.components.v1 as components
 import requests
-import openai
 import json
 import urllib.parse
-import os
 
 # Configuration
-openai.api_key = "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"
-MODEL = "gpt-3.5-turbo"
+OLLAMA_API = "http://localhost:11434/api/generate"
+MODEL = "llama3"
 
 # Travelpayouts verification meta tag
 st.markdown("""
@@ -74,15 +72,24 @@ def generate_booking_links(hotel, city):
         "Google Maps": f"https://www.google.com/maps?q={query}"
     }
 
-def call_openai(prompt):
+def call_ollama(prompt):
     try:
-        response = openai.ChatCompletion.create(
-            model=MODEL,
-            messages=[{"role": "user", "content": prompt}]
+        response = requests.post(
+            OLLAMA_API,
+            json={"model": MODEL, "prompt": prompt, "options": {"temperature": 0.6, "num_predict": 1024}},
+            stream=True
         )
-        return response.choices[0].message.content.strip()
+        result = ""
+        for line in response.iter_lines():
+            if line:
+                try:
+                    json_obj = json.loads(line.decode("utf-8"))
+                    result += json_obj.get("response", "")
+                except json.JSONDecodeError:
+                    pass
+        return result.strip() or "⚠️ No valid response from Ollama."
     except Exception as e:
-        return f"❌ Error contacting OpenAI: {str(e)}"
+        return f"❌ Error contacting Ollama: {str(e)}"
 
 def super_travel_agent(city, country, days, interests, currency_symbol, travel_style, flight_option, month):
     prompt = f"""
@@ -110,7 +117,7 @@ Format:
 
 Use markdown formatting and spacing.
 """
-    return call_openai(prompt)
+    return call_ollama(prompt)
 
 # Streamlit UI
 st.set_page_config(page_title="AI Trip Planner", layout="centered")
