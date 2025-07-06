@@ -7,6 +7,11 @@ import urllib.parse
 OLLAMA_API = "http://localhost:11434/api/generate"
 MODEL = "llama3"
 
+# Travelpayouts verification (for website verification)
+st.markdown("""
+<meta name="travelpayouts-site-verification" content="xyz12345" />
+""", unsafe_allow_html=True)  # Replace xyz12345 with your actual code
+
 # Country → Cities
 countries_cities = {
     "India 🇮🇳": ["Goa", "Manali", "Udaipur", "Jaipur", "Kerala"],
