@@ -12,6 +12,18 @@ st.markdown("""
 <meta name="travelpayouts-site-verification" content="xyz12345" />
 """, unsafe_allow_html=True)  # Replace xyz12345 with your actual code
 
+# Travelpayouts affiliate JS script
+st.markdown("""
+<script data-noptimize="1" data-cfasync="false" data-wpfc-render="false">
+  (function () {
+      var script = document.createElement("script");
+      script.async = 1;
+      script.src = 'https://emrldtp.cc/NDM0MDk2.js?t=434096';
+      document.head.appendChild(script);
+  })();
+</script>
+""", unsafe_allow_html=True)
+
 # Country → Cities
 countries_cities = {
     "India 🇮🇳": ["Goa", "Manali", "Udaipur", "Jaipur", "Kerala"],
