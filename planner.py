@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import requests
 import json
 import urllib.parse
@@ -7,10 +8,10 @@ import urllib.parse
 OLLAMA_API = "http://localhost:11434/api/generate"
 MODEL = "llama3"
 
-# Travelpayouts verification (for website verification)
+# Travelpayouts verification meta tag
 st.markdown("""
 <meta name="travelpayouts-site-verification" content="xyz12345" />
-""", unsafe_allow_html=True)  # Replace xyz12345 with your actual code
+""", unsafe_allow_html=True)
 
 # Travelpayouts affiliate JS script
 st.markdown("""
@@ -144,3 +145,9 @@ if submit:
 
     st.subheader("📍 Maps of Suggested Places")
     st.markdown(f"[🗺️ View Hotels and Sights in {selected_city}](https://www.google.com/maps/search/{urllib.parse.quote_plus(selected_city + ' hotels and attractions')})")
+
+    st.subheader("🏨 Book Hotels and Compare Flights")
+    components.html(f"""
+    <iframe src='https://tp.media/content?promo_id=4045&shmarker=123456&campaign_id=100&trs=264079&locale=en&powered_by=false&searchUrl=hotels&hotel_id=&city={urllib.parse.quote_plus(selected_city)}&country={urllib.parse.quote_plus(selected_country)}&lang=en&currency=usd' width='100%' height='250' frameborder='0'></iframe>
+    <iframe src='https://tp.media/content?promo_id=4044&shmarker=123456&campaign_id=101&trs=264079&locale=en&powered_by=false&searchUrl=flights&city_from=&city_to={urllib.parse.quote_plus(selected_city)}&lang=en&currency=usd' width='100%' height='250' frameborder='0'></iframe>
+    """, height=600)
