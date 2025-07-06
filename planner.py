@@ -25,6 +25,16 @@ st.markdown("""
 </script>
 """, unsafe_allow_html=True)
 
+# User login or registration
+st.sidebar.header("🔐 User Access")
+login_email = st.sidebar.text_input("📧 Email")
+login_password = st.sidebar.text_input("🔑 Password", type="password")
+if st.sidebar.button("🔓 Login / Sign Up"):
+    if login_email and login_password:
+        st.sidebar.success(f"Welcome, {login_email.split('@')[0]}! 🎉")
+    else:
+        st.sidebar.error("Please enter both email and password.")
+
 # Country → Cities
 countries_cities = {
     "India 🇮🇳": ["Goa", "Manali", "Udaipur", "Jaipur", "Kerala"],
@@ -150,4 +160,7 @@ if submit:
     components.html(f"""
     <iframe src='https://tp.media/content?promo_id=4045&shmarker=123456&campaign_id=100&trs=264079&locale=en&powered_by=false&searchUrl=hotels&hotel_id=&city={urllib.parse.quote_plus(selected_city)}&country={urllib.parse.quote_plus(selected_country)}&lang=en&currency=usd' width='100%' height='250' frameborder='0'></iframe>
     <iframe src='https://tp.media/content?promo_id=4044&shmarker=123456&campaign_id=101&trs=264079&locale=en&powered_by=false&searchUrl=flights&city_from=&city_to={urllib.parse.quote_plus(selected_city)}&lang=en&currency=usd' width='100%' height='250' frameborder='0'></iframe>
-    """, height=600)
+    <div style='position:fixed;bottom:15px;right:15px;z-index:1000;'>
+      <a href='https://www.skyscanner.com/' target='_blank'><img src='https://www.travelpayouts.com/img/banners/728x90_en_flight.png' width='240'/></a>
+    </div>
+    """, height=650)
