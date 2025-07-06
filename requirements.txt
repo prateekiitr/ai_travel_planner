@@ -2,5 +2,5 @@ streamlit
 requests
 python-dotenv
 streamlit
-openai
-requests
+google-generativeai
+python-dotenv
