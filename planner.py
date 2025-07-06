@@ -11,7 +11,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Load Gemini API Key
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "your-gemini-api-key-here")
+# It's better to ensure this is truly loaded from the environment
+# and provide a clear message if it's not.
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+if not GEMINI_API_KEY:
+    st.error("GEMINI_API_KEY environment variable not found. Please set it.")
+    st.stop() # Stop the app if the key isn't available
+
 genai.configure(api_key=GEMINI_API_KEY)
 
 # Travelpayouts verification meta tag
@@ -79,8 +85,19 @@ def generate_booking_links(hotel, city):
     }
 
 def call_gemini(prompt):
+    """
+    Calls the Gemini API with a given prompt and returns the model's response.
+
+    Args:
+        prompt (str): The text prompt to send to the Gemini model.
+
+    Returns:
+        str: The generated text response from the Gemini API, or an error message.
+    """
     try:
-        model = genai.GenerativeModel(model_name="models/gemini-pro")
+        # Correct model name: "gemini-1.5-flash" or "gemini-pro" are common choices.
+        # "ggemini-2.5-flash" is not a valid public model name.
+        model = genai.GenerativeModel("gemini-1.5-flash") # Or "gemini-pro"
         response = model.generate_content(prompt)
         return response.text
     except Exception as e:
@@ -99,8 +116,8 @@ Plan a {days}-day {travel_style} trip to {city}, {country} in {month}.
 💡 Provide:
 1. Seasonal tips: is {month} good? Pros/cons.
 2. Realistic total budget in {currency_symbol} ({'with flights' if flight_option == 'Yes' else 'excluding flights'})
-3. Top 3 hotels with price + links: Booking, Agoda, Maps
-4. Top 3 flights with price (use dummy airline info) + links: Skyscanner, MMT
+3. Top 3 hotels with price + links: Booking, Agoda, Maps (use dummy prices for hotels if not specified by user. Provide a range e.g. 100-200 USD)
+4. Top 3 flights with price (use dummy airline info, provide a range e.g. 300-500 USD) + links: Skyscanner, MMT
 5. Day-wise itinerary with activities, food, hotel, tips.
 
 Format:
@@ -149,7 +166,8 @@ if submit:
     st.markdown(plan, unsafe_allow_html=True)
 
     st.subheader("📍 Maps of Suggested Places")
-    st.markdown(f"[🗺️ View Hotels and Sights in {selected_city}](https://www.google.com/maps/search/{urllib.parse.quote_plus(selected_city + ' hotels and attractions')})")
+    # Using the correct base URL for Google Maps
+    st.markdown(f"[🗺️ View Hotels and Sights in {selected_city}](https://www.google.com/maps/search/?api=1&query={urllib.parse.quote_plus(selected_city + ' hotels and attractions')})")
 
     st.subheader("🏨 Book Hotels and Compare Flights")
     components.html(f"""
