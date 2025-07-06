@@ -1,12 +1,10 @@
 import streamlit as st
 import streamlit.components.v1 as components
 import requests
-import openai
+import google.generativeai as genai
 import json
 import urllib.parse
 import os
-from dotenv import load_dotenv
-load_dotenv()
 
 # Load Gemini API Key
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "your-gemini-api-key-here")
@@ -76,15 +74,13 @@ def generate_booking_links(hotel, city):
         "Google Maps": f"https://www.google.com/maps?q={query}"
     }
 
-def call_openai(prompt):
+def call_gemini(prompt):
     try:
-        response = openai.chat.completions.create(
-            model=MODEL,
-            messages=[{"role": "user", "content": prompt}]
-        )
-        return response.choices[0].message.content.strip()
+        model = genai.GenerativeModel("gemini-pro")
+        response = model.generate_content(prompt)
+        return response.text
     except Exception as e:
-        return f"❌ Error contacting OpenAI: {str(e)}"
+        return f"❌ Error contacting Gemini API: {str(e)}"
 
 def super_travel_agent(city, country, days, interests, currency_symbol, travel_style, flight_option, month):
     prompt = f"""
@@ -112,7 +108,7 @@ Format:
 
 Use markdown formatting and spacing.
 """
-    return call_openai(prompt)
+    return call_gemini(prompt)
 
 # Streamlit UI
 st.set_page_config(page_title="AI Trip Planner", layout="centered")
