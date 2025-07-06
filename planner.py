@@ -6,7 +6,7 @@ import json
 import urllib.parse
 import os
 
-# Configuration
+# Configuration (hardcoded API key for quick testing)
 openai.api_key = "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"
 MODEL = "gpt-3.5-turbo"
 
@@ -76,7 +76,7 @@ def generate_booking_links(hotel, city):
 
 def call_openai(prompt):
     try:
-        response = openai.ChatCompletion.create(
+        response = openai.chat.completions.create(
             model=MODEL,
             messages=[{"role": "user", "content": prompt}]
         )
