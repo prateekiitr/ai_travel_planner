@@ -5,10 +5,12 @@ import openai
 import json
 import urllib.parse
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
-# Configuration (hardcoded API key for quick testing)
-openai.api_key = "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"
-MODEL = "gpt-3.5-turbo"
+# Load Gemini API Key
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "your-gemini-api-key-here")
+genai.configure(api_key=GEMINI_API_KEY)
 
 # Travelpayouts verification meta tag
 st.markdown("""
