@@ -2,15 +2,16 @@ import streamlit as st
 import streamlit.components.v1 as components
 import requests
 import google.generativeai as genai
-from dotenv import load_dotenv
-load_dotenv()
 import json
 import urllib.parse
 import os
+from dotenv import load_dotenv
 
+# Load environment variables
+load_dotenv()
 
 # Load Gemini API Key
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "your-gemini-api-key-here")
 genai.configure(api_key=GEMINI_API_KEY)
 
 # Travelpayouts verification meta tag
@@ -79,7 +80,7 @@ def generate_booking_links(hotel, city):
 
 def call_gemini(prompt):
     try:
-        model = genai.GenerativeModel("gemini-pro")
+        model = genai.GenerativeModel(model_name="models/gemini-pro")
         response = model.generate_content(prompt)
         return response.text
     except Exception as e:
