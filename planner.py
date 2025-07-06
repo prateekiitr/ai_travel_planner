@@ -2,12 +2,15 @@ import streamlit as st
 import streamlit.components.v1 as components
 import requests
 import google.generativeai as genai
+from dotenv import load_dotenv
+load_dotenv()
 import json
 import urllib.parse
 import os
 
+
 # Load Gemini API Key
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "your-gemini-api-key-here")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=GEMINI_API_KEY)
 
 # Travelpayouts verification meta tag
